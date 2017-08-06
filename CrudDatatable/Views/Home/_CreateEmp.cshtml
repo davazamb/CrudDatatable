@@ -1,0 +1,101 @@
+﻿
+@model CrudDatatable.ViewModels.EmployeeViewModel
+
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h4 class="modal-title" id="MyModalTitle">Add New Employee</h4>
+</div>
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "CreateEmp" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="modal-body">
+
+        <div class="form-horizontal">
+            @*@Html.ValidationSummary(true, "", new { @class = "text-danger" })*@
+            <div class="form-group">
+                @Html.LabelFor(m => m.Employee.FirstName, htmlAttributes: new { @class = "control-label col-sm-3" })
+                <div class="col-sm-9">
+                    @Html.EditorFor(m => m.Employee.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(m => m.Employee.FirstName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.Employee.LastName, htmlAttributes: new { @class = "control-label col-sm-3" })
+                <div class="col-sm-9">
+                    @Html.EditorFor(m => m.Employee.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(m => m.Employee.LastName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @*@Html.DropDownList("Employee_Gender", new List<SelectListItem>
+                    {
+                       new SelectListItem { Text="Male",Value="Male"},
+                       new SelectListItem { Text="FeMale",Value="FeMale"}
+                    }, "-- Select Gender --", htmlAttributes: new { @class = "form-control" })*@
+                @Html.LabelFor(m => m.Employee.Gender, htmlAttributes: new { @class = "control-label col-sm-3" })
+                <div class="col-sm-9">
+                    @Html.DropDownListFor(m => m.Employee.Gender,
+                    new SelectList((IEnumerable<SelectListItem>)ViewBag.gender, "Value", "Text"), "-- Select gender --",
+                    htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Employee.Gender, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.Employee.Salary, htmlAttributes: new { @class = "control-label col-sm-3" })
+                <div class="col-sm-9">
+                    @Html.EditorFor(m => m.Employee.Salary, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(m => m.Employee.Salary, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.Employee.DOJ, htmlAttributes: new { @class = "control-label col-sm-3" })
+                <div class="col-sm-9">
+                    @Html.EditorFor(m => m.Employee.DOJ, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(m => m.Employee.DOJ, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(m => m.Employee.DeptID, htmlAttributes: new { @class = "control-label col-sm-3" })
+                <div class="col-sm-9">
+                    @Html.DropDownListFor(m => m.Employee.DeptID, new SelectList(Model.Departments, "DeptID", "DeptName"),
+                    "-- Select Department --", htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Employee.DeptID, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn" data-dismiss="modal">Cancel</button>
+        <input type="submit" class="btn btn-primary" value="Save" id="btnSubmit" />
+    </div>
+}
+
+<script>
+    $(document).ready(function () {
+        $.validator.unobtrusive.parse('#CreateEmp');
+        $("#btnSubmit").click(function () {
+            if (!$("#CreateEmp").valid()) {
+                return false;
+            }
+        });
+
+        $('#Employee_DOJ').datepicker({
+            //format: 'dd-mm-yyyy',
+            format: 'mm/dd/yyyy',
+            autoclose: true,
+            clearBtn: true,
+            todayHighlight: true,
+            //todayBtn: true,
+            todayBtn: 'linked',
+            orientation: "top left"
+        });
+    });
+</script>
